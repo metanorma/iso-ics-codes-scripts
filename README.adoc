@@ -1,6 +1,6 @@
 = ISO ICS Codes Scripts
 
-Scripts to fetch ISO ICS codes into a static data file.
+Scripts to fetch ISO ICS codes from https://www.iso.org/standards-catalogue/browse-by-ics.html into a static data file.
 
 Usage:
 ```
