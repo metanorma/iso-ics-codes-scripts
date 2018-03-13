@@ -2,3 +2,16 @@
 
 Scripts to fetch ISO ICS codes into a static data file.
 
+Usage:
+```
+ruby ics_scrapper.rb
+```
+The script uses 3 threads by defaul, but it's possibel passing param to chahge number of threads from 1 to 3:
+```
+ruby ics_scrapper.rb 2
+```
+Progress info outputs during fetching data:
+```
+ Parse 872 of 1381 Queue: 589 Threads: 3
+```
+Data files stored in `./ics` direcrtory.
