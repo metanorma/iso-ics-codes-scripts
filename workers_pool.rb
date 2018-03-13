@@ -11,9 +11,9 @@ class WorkersPool
     @fields_parsed = 0
 
     # Initialize file
-    File.open "ics.json", "w" do |f|
-      f.write [].to_json
-    end
+    # File.open "ics.json", "w" do |f|
+    #   f.write [].to_json
+    # end
 
     mutex = Mutex.new
 
@@ -26,6 +26,10 @@ class WorkersPool
           @fields_parsed += 1
           print "Parse #{@fields_parsed} of #{@fields} Queue: #{@queue.size} Threads: #{@threads.size}   \r"
 
+          mutex.synchronize do
+            add_json_to_file(item.select { |k| [:code, :desc, :desc_full, :notes].include? k })
+          end
+
           groups = self.class.get_groups(item[:href])
           # require "byebug"; byebug if item[:code].size > 2
           if groups.any?
@@ -36,9 +40,6 @@ class WorkersPool
               @fields += 1
             end
           else
-            mutex.synchronize do
-              add_json_to_file(item.select { |k| [:code, :desc, :desc_full, :notes].include? k })
-            end
             @queue << :END if @queue.size == 0
           end
         end
@@ -85,23 +86,33 @@ class WorkersPool
   end
 
   private
-  def add_json_to_file(code:, desc:, desc_full: '', notes: [])
+  def add_json_to_file(code:, desc:, desc_full: nil, notes: [])
     gh = {
-      "@context": "https://isoics.org/ics/ns/subgroup.jsonld",
       code:            code,
       fieldcode:       code.match(/^\d+/).to_s,
-      description:     desc, 
-      descriptionFull: desc_full
+      description:     desc
     }
+
     groupcode = code.match(/(?<=^\d{2}\.)\d+/)
     gh[:groupcode] = groupcode.to_s if groupcode
+
     subgroupcode = code.match(/(?<=^\d{2}\.\d{3}\.)\d+/)
     gh[:subgroupcode] = subgroupcode.to_s if subgroupcode
+
+    if subgroupcode
+      gh["@context"] = "https://isoics.org/ics/ns/subgroup.jsonld"
+    elsif groupcode
+      gh["@context"] = "https://isoics.org/jsonld/group.jsonld"
+    else
+      gh["@context"] = "https://isoics.org/jsonld/field.jsonld"
+    end
+
+    gh[:descriptionFull] = desc_full if desc_full
     gh[:notes] = notes if notes.any?
 
-    json = File.read "ics.json"
-    File.open "ics.json", "w" do |f|
-      f.write JSON.pretty_generate(JSON.parse(json) << gh)
+    # json = File.read "ics_#{code.gsub(".", "_")}.json"
+    File.open "ics/#{code.gsub(".", "_")}.json", "w" do |f|
+      f.write JSON.pretty_generate(gh)
     end
   end
 end
