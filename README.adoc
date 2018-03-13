@@ -15,3 +15,5 @@ Progress info outputs during fetching data:
  Parse 872 of 1381 Queue: 589 Threads: 3
 ```
 Data files stored in `./ics` direcrtory.
+
+You can get feched data files are form https://github.com/riboseinc/iso-ics-codes repo.
