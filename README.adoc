@@ -16,4 +16,4 @@ Progress info outputs during fetching data:
 ```
 Data files stored in `./ics` direcrtory.
 
-You can get feched data files are form https://github.com/riboseinc/iso-ics-codes repo.
+You can get feched data files form https://github.com/riboseinc/iso-ics-codes repo.
