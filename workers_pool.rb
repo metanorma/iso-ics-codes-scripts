@@ -68,7 +68,7 @@ class WorkersPool
     notes = desc_doc.xpath("em").map do |note|
       note_link = note.xpath "a"
       if note_link.any?
-        { text: "#{note.children.first.text}{ics-code}", "ics-code": link.text }
+        { text: "#{note.children.first.text}{ics-code}", "ics-code": note_link.text }
       else
         { text: note.text }
       end
