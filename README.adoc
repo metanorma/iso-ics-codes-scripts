@@ -1,4 +1,19 @@
 = ISO ICS Codes Scripts
 
-Scripts to fetch ISO ICS codes into a static data file.
+Scripts to fetch ISO ICS codes from https://www.iso.org/standards-catalogue/browse-by-ics.html into a static data file.
 
+Usage:
+```
+ruby ics_scrapper.rb
+```
+The script uses 3 threads by defaul, but it's possibel passing param to chahge number of threads from 1 to 3:
+```
+ruby ics_scrapper.rb 2
+```
+Progress info outputs during fetching data:
+```
+ Parse 872 of 1381 Queue: 589 Threads: 3
+```
+Data files stored in `./ics` direcrtory.
+
+You can get feched data files form https://github.com/riboseinc/iso-ics-codes repo.
